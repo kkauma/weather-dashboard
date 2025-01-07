@@ -5,12 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Weather Dashboard</title>
     <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div class="container">
       <div class="weather-card">
         <h1>Weather Dashboard</h1>
-        <div id="loading">Loading...</div>
+        <div class="unit-toggle">
+          <button id="celsius" class="active">°C</button>
+          <button id="fahrenheit">°F</button>
+        </div>
         <div id="weather-info" class="hidden">
           <h2 id="location"></h2>
           <div class="weather-main">
@@ -23,7 +30,6 @@
             <div>Wind: <span id="wind"></span> km/h</div>
           </div>
         </div>
-        <div id="error" class="hidden">Unable to fetch weather data.</div>
       </div>
     </div>
     <script src="script.js"></script>

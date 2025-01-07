@@ -13,6 +13,11 @@ app.get("/api/weather", async (req, res) => {
       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${process.env.WEATHER_API_KEY}`
     );
     const data = await response.json();
+
+    if (data.cod && data.cod !== 200) {
+      throw new Error(data.message || "Failed to fetch weather data");
+    }
+
     res.json(data);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch weather data" });

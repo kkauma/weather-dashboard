@@ -1,4 +1,19 @@
+let currentUnit = "celsius";
+let currentTemp = 0;
+
+function convertTemperature(celsius) {
+  currentTemp = celsius;
+  return currentUnit === "fahrenheit"
+    ? Math.round((celsius * 9) / 5 + 32)
+    : Math.round(celsius);
+}
+
 function getLocation() {
+  // Show loading state immediately
+  const weatherMain = document.querySelector(".weather-main");
+  weatherMain.innerHTML = '<div class="spinner"></div>';
+  weatherMain.classList.add("loading");
+
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       (position) =>
@@ -16,7 +31,9 @@ async function getWeather(latitude, longitude) {
       `/api/weather?lat=${latitude}&lon=${longitude}`
     );
 
-    if (!response.ok) throw new Error("Weather data not available");
+    if (!response.ok) {
+      throw new Error("Weather data not available");
+    }
 
     const data = await response.json();
     displayWeather(data);
@@ -26,30 +43,76 @@ async function getWeather(latitude, longitude) {
 }
 
 function displayWeather(data) {
-  document.getElementById("loading").classList.add("hidden");
-  document.getElementById("weather-info").classList.remove("hidden");
+  const weatherMain = document.querySelector(".weather-main");
+  weatherMain.classList.remove("loading");
 
+  // Store the temperature in Celsius
+  currentTemp = data.main.temp;
+
+  weatherMain.innerHTML = `
+    <img id="weather-icon" src="http://openweathermap.org/img/wn/${
+      data.weather[0].icon
+    }@2x.png" alt="Weather icon" />
+    <div class="temperature">
+      <span id="temperature">${convertTemperature(currentTemp)}</span>°${
+    currentUnit === "celsius" ? "C" : "F"
+  }
+    </div>
+  `;
+
+  document.getElementById("weather-info").classList.remove("hidden");
   document.getElementById("location").textContent = data.name;
-  document.getElementById("temperature").textContent = Math.round(
-    data.main.temp
-  );
   document.getElementById("description").textContent =
     data.weather[0].description;
   document.getElementById("humidity").textContent = data.main.humidity;
   document.getElementById("wind").textContent = Math.round(
     data.wind.speed * 3.6
-  ); // Convert m/s to km/h
-
-  const iconCode = data.weather[0].icon;
-  document.getElementById(
-    "weather-icon"
-  ).src = `http://openweathermap.org/img/wn/${iconCode}@2x.png`;
+  );
 }
 
-function showError() {
+function showError(
+  message = "Unable to fetch weather data. Please try again later."
+) {
   document.getElementById("loading").classList.add("hidden");
-  document.getElementById("error").classList.remove("hidden");
+  document.getElementById("weather-info").classList.add("hidden");
+  const errorElement = document.getElementById("error");
+  errorElement.classList.remove("hidden");
+  errorElement.textContent = message;
 }
 
 // Start the app
 getLocation();
+
+document.addEventListener("DOMContentLoaded", getLocation);
+
+// Add event listeners for the toggle buttons
+document.addEventListener("DOMContentLoaded", () => {
+  const celsiusBtn = document.getElementById("celsius");
+  const fahrenheitBtn = document.getElementById("fahrenheit");
+
+  celsiusBtn.addEventListener("click", () => {
+    if (currentUnit !== "celsius") {
+      currentUnit = "celsius";
+      celsiusBtn.classList.add("active");
+      fahrenheitBtn.classList.remove("active");
+      const tempDisplay = document.getElementById("temperature");
+      if (tempDisplay) {
+        tempDisplay.textContent = convertTemperature(currentTemp);
+        tempDisplay.nextElementSibling.textContent = "°C";
+      }
+    }
+  });
+
+  fahrenheitBtn.addEventListener("click", () => {
+    if (currentUnit !== "fahrenheit") {
+      currentUnit = "fahrenheit";
+      fahrenheitBtn.classList.add("active");
+      celsiusBtn.classList.remove("active");
+      const tempDisplay = document.getElementById("temperature");
+      if (tempDisplay) {
+        tempDisplay.textContent = convertTemperature(currentTemp);
+        tempDisplay.nextElementSibling.textContent = "°F";
+      }
+    }
+  });
+});
