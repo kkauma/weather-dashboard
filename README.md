@@ -2,6 +2,8 @@
 
 A simple, responsive weather dashboard that displays current weather conditions for your location.
 
+🌐 [Live Demo](your-vercel-url-here)
+
 ## Features
 
 - Automatic location detection
