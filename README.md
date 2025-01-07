@@ -2,7 +2,7 @@
 
 A simple, responsive weather dashboard that displays current weather conditions for your location.
 
-🌐 [Live Demo](your-vercel-url-here)
+🌐 [Live Demo](https://weather-dashboard-omega-two.vercel.app/)
 
 ## Features
 
