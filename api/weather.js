@@ -7,12 +7,16 @@ module.exports = async (req, res) => {
 
   const { lat, lon } = req.query;
 
-  if (!lat || !lon) {
-    return res.status(400).json({ error: "Missing latitude or longitude" });
-  }
+  // Debug logging
+  console.log("API Key:", process.env.WEATHER_API_KEY ? "Present" : "Missing");
+  console.log("Coordinates:", { lat, lon });
 
   if (!process.env.WEATHER_API_KEY) {
     return res.status(500).json({ error: "Weather API key is not configured" });
+  }
+
+  if (!lat || !lon) {
+    return res.status(400).json({ error: "Missing latitude or longitude" });
   }
 
   try {
@@ -23,14 +27,17 @@ module.exports = async (req, res) => {
 
     if (data.cod && data.cod !== 200) {
       console.error("Weather API Error:", data);
-      throw new Error(data.message || "Failed to fetch weather data");
+      return res
+        .status(500)
+        .json({ error: data.message || "Weather API error" });
     }
 
     return res.json(data);
   } catch (error) {
     console.error("Server Error:", error);
-    return res
-      .status(500)
-      .json({ error: error.message || "Failed to fetch weather data" });
+    return res.status(500).json({
+      error: "Failed to fetch weather data",
+      details: error.message,
+    });
   }
 };

@@ -37,18 +37,19 @@ async function getWeather(latitude, longitude) {
       `api/weather?lat=${latitude}&lon=${longitude}`
     );
 
+    const data = await response.json(); // Always try to get the JSON response
+
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Weather API Error:", errorData);
-      throw new Error(errorData.error || "Weather data not available");
+      console.error("API Error:", data);
+      throw new Error(
+        data.error || data.details || "Weather data not available"
+      );
     }
 
-    const data = await response.json();
-    console.log("Weather Data:", data); // Add this line for debugging
     displayWeather(data);
   } catch (error) {
     console.error("Client Error:", error);
-    showError();
+    showError(error.message);
   }
 }
 
@@ -85,12 +86,14 @@ function displayWeather(data) {
   );
 }
 
-function showError() {
+function showError(
+  message = "Unable to fetch weather data. Please try again later."
+) {
   const weatherMain = document.querySelector(".weather-main");
   weatherMain.classList.remove("loading");
   weatherMain.innerHTML = `
     <div class="error">
-      Unable to fetch weather data. Please try again later.
+      ${message}
     </div>
   `;
 }
