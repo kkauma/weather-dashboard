@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="weather-card">
+        <h1>Weather Dashboard</h1>
+        <div id="loading">Loading...</div>
+        <div id="weather-info" class="hidden">
+          <h2 id="location"></h2>
+          <div class="weather-main">
+            <img id="weather-icon" src="" alt="Weather icon" />
+            <div class="temperature"><span id="temperature"></span>°C</div>
+          </div>
+          <div id="description"></div>
+          <div class="weather-details">
+            <div>Humidity: <span id="humidity"></span>%</div>
+            <div>Wind: <span id="wind"></span> km/h</div>
+          </div>
+        </div>
+        <div id="error" class="hidden">Unable to fetch weather data.</div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
