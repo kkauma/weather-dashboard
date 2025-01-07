@@ -1,15 +1,11 @@
-const fetch = require("node-fetch");
+import fetch from "node-fetch";
 
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
   // Enable CORS
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET");
 
   const { lat, lon } = req.query;
-
-  // Debug logging
-  console.log("API Key:", process.env.WEATHER_API_KEY ? "Present" : "Missing");
-  console.log("Coordinates:", { lat, lon });
 
   if (!process.env.WEATHER_API_KEY) {
     return res.status(500).json({ error: "Weather API key is not configured" });
@@ -40,4 +36,4 @@ module.exports = async (req, res) => {
       details: error.message,
     });
   }
-};
+}
