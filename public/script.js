@@ -68,7 +68,10 @@ function displayWeather(data) {
     data.weather[0].description;
   document.getElementById("humidity").textContent = data.main.humidity;
   document.getElementById("wind").textContent = Math.round(
-    data.wind.speed * 3.6
+    data.wind.speed * 2.237
+  );
+  document.getElementById("visibility").textContent = Math.round(
+    data.visibility / 1609
   );
 }
 
@@ -87,7 +90,7 @@ getLocation();
 
 document.addEventListener("DOMContentLoaded", getLocation);
 
-// Add event listeners for the toggle buttons
+// Add event listeners for temperature unit toggle
 document.addEventListener("DOMContentLoaded", () => {
   const celsiusBtn = document.getElementById("celsius");
   const fahrenheitBtn = document.getElementById("fahrenheit");
@@ -99,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
       fahrenheitBtn.classList.remove("active");
       const tempDisplay = document.getElementById("temperature");
       const tempUnit = document.getElementById("temp-unit");
-      if (tempDisplay && tempUnit) {
+      if (tempDisplay && tempUnit && currentTemp !== null) {
         tempDisplay.textContent = convertTemperature(currentTemp);
         tempUnit.textContent = "°C";
       }
@@ -113,12 +116,15 @@ document.addEventListener("DOMContentLoaded", () => {
       celsiusBtn.classList.remove("active");
       const tempDisplay = document.getElementById("temperature");
       const tempUnit = document.getElementById("temp-unit");
-      if (tempDisplay && tempUnit) {
+      if (tempDisplay && tempUnit && currentTemp !== null) {
         tempDisplay.textContent = convertTemperature(currentTemp);
         tempUnit.textContent = "°F";
       }
     }
   });
+
+  // Call getLocation to initialize the weather data
+  getLocation();
 });
 
 // Theme toggle functionality
