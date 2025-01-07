@@ -1,11 +1,11 @@
 let currentUnit = "celsius";
-let currentTemp = 0;
+let currentTemp = null;
 
 function convertTemperature(celsius) {
-  currentTemp = celsius;
-  return currentUnit === "fahrenheit"
-    ? Math.round((celsius * 9) / 5 + 32)
-    : Math.round(celsius);
+  if (currentUnit === "fahrenheit") {
+    return Math.round((celsius * 9) / 5 + 32);
+  }
+  return Math.round(celsius);
 }
 
 function getLocation() {
@@ -54,9 +54,11 @@ function displayWeather(data) {
       data.weather[0].icon
     }@2x.png" alt="Weather icon" />
     <div class="temperature">
-      <span id="temperature">${convertTemperature(currentTemp)}</span>°${
+      <span id="temperature">${convertTemperature(
+        currentTemp
+      )}</span><span id="temp-unit">°${
     currentUnit === "celsius" ? "C" : "F"
-  }
+  }</span>
     </div>
   `;
 
@@ -96,9 +98,10 @@ document.addEventListener("DOMContentLoaded", () => {
       celsiusBtn.classList.add("active");
       fahrenheitBtn.classList.remove("active");
       const tempDisplay = document.getElementById("temperature");
-      if (tempDisplay) {
+      const tempUnit = document.getElementById("temp-unit");
+      if (tempDisplay && tempUnit) {
         tempDisplay.textContent = convertTemperature(currentTemp);
-        tempDisplay.nextElementSibling.textContent = "°C";
+        tempUnit.textContent = "°C";
       }
     }
   });
@@ -109,9 +112,10 @@ document.addEventListener("DOMContentLoaded", () => {
       fahrenheitBtn.classList.add("active");
       celsiusBtn.classList.remove("active");
       const tempDisplay = document.getElementById("temperature");
-      if (tempDisplay) {
+      const tempUnit = document.getElementById("temp-unit");
+      if (tempDisplay && tempUnit) {
         tempDisplay.textContent = convertTemperature(currentTemp);
-        tempDisplay.nextElementSibling.textContent = "°F";
+        tempUnit.textContent = "°F";
       }
     }
   });
