@@ -16,11 +16,17 @@ function getLocation() {
 
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
-      (position) =>
-        getWeather(position.coords.latitude, position.coords.longitude),
-      showError
+      (position) => {
+        console.log("Geolocation:", position.coords); // Add this line for debugging
+        getWeather(position.coords.latitude, position.coords.longitude);
+      },
+      (error) => {
+        console.error("Geolocation Error:", error); // Add this line for debugging
+        showError();
+      }
     );
   } else {
+    console.error("Geolocation not supported"); // Add this line for debugging
     showError();
   }
 }
@@ -32,12 +38,16 @@ async function getWeather(latitude, longitude) {
     );
 
     if (!response.ok) {
-      throw new Error("Weather data not available");
+      const errorData = await response.json();
+      console.error("Weather API Error:", errorData);
+      throw new Error(errorData.error || "Weather data not available");
     }
 
     const data = await response.json();
+    console.log("Weather Data:", data); // Add this line for debugging
     displayWeather(data);
   } catch (error) {
+    console.error("Client Error:", error);
     showError();
   }
 }
@@ -75,14 +85,14 @@ function displayWeather(data) {
   );
 }
 
-function showError(
-  message = "Unable to fetch weather data. Please try again later."
-) {
-  document.getElementById("loading").classList.add("hidden");
-  document.getElementById("weather-info").classList.add("hidden");
-  const errorElement = document.getElementById("error");
-  errorElement.classList.remove("hidden");
-  errorElement.textContent = message;
+function showError() {
+  const weatherMain = document.querySelector(".weather-main");
+  weatherMain.classList.remove("loading");
+  weatherMain.innerHTML = `
+    <div class="error">
+      Unable to fetch weather data. Please try again later.
+    </div>
+  `;
 }
 
 // Start the app

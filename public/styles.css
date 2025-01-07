@@ -279,3 +279,11 @@ h1 {
 [data-theme="light"] .dark-icon {
   display: none;
 }
+
+.error {
+  color: #ef4444;
+  padding: 1rem;
+  text-align: center;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 8px;
+}
