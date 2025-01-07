@@ -34,7 +34,7 @@ function getLocation() {
 async function getWeather(latitude, longitude) {
   try {
     const response = await fetch(
-      `/api/weather?lat=${latitude}&lon=${longitude}`
+      `api/weather?lat=${latitude}&lon=${longitude}`
     );
 
     if (!response.ok) {
