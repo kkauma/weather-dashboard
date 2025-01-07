@@ -34,10 +34,10 @@ function getLocation() {
 async function getWeather(latitude, longitude) {
   try {
     const response = await fetch(
-      `api/weather?lat=${latitude}&lon=${longitude}`
+      `/api/weather?lat=${latitude}&lon=${longitude}`
     );
 
-    const data = await response.json(); // Always try to get the JSON response
+    const data = await response.json();
 
     if (!response.ok) {
       console.error("API Error:", data);

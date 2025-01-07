@@ -1,7 +1,6 @@
-import fetch from "node-fetch";
+const fetch = require("node-fetch");
 
-export default async function handler(req, res) {
-  // Enable CORS
+module.exports = async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET");
 
@@ -36,4 +35,4 @@ export default async function handler(req, res) {
       details: error.message,
     });
   }
-}
+};
